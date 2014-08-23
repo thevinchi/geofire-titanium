@@ -103,7 +103,7 @@ GeoFire.prototype.set = function (key, location)
 	return new RSVP.Promise(_.bind(function (resolve, reject)
 	{
 		// Kick the [GeoFire]
-		_geofire.setLocation(this._firebase.url, key, location, function (error)
+		_geofire.setLocation(this._url, key, location, function (error)
 		{
 			if (error) {reject(error)}
 			else {resolve()}
@@ -123,7 +123,7 @@ GeoFire.prototype.get = function (key)
 	return new RSVP.Promise(_.bind(function (resolve, reject)
 	{
 		// Kick the [GeoFire]
-		_geofire.getLocation(this._firebase.url, key, function (location, error)
+		_geofire.getLocation(this._url, key, function (location, error)
 		{
 			if (error) {reject(error)}
 			else {resolve(location)}
@@ -144,7 +144,7 @@ GeoFire.prototype.remove = function (key)
 	return new RSVP.Promise(_.bind(function (resolve, reject)
 	{
 		// Kick the [GeoFire]
-		_geofire.removeLocation(this._firebase.url, key, function (error)
+		_geofire.removeLocation(this._url, key, function (error)
 		{
 			if (error) {reject(error)}
 			else {resolve()}
