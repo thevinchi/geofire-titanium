@@ -88,7 +88,7 @@
  *  - args[3] - (KrollCallback) callback
  *
  */
-- (void)set: (id)args
+- (void)setLocation: (id)args
 {
     if (! [args count] == 4) {return;}
 	
@@ -130,8 +130,6 @@
  */
 - (void)getLocation: (id)args
 {
-	NSLog(@"[INFO] Getting: %@", args[1]);
-
     if (! [args count] == 3) {return;}
 
 	// Initialize the [args]
@@ -145,10 +143,42 @@
 	// Create the [geo] Instance
 	GeoFire * _geo = [[GeoFire alloc] initWithFirebaseRef:[[Firebase alloc] initWithUrl:_url]];
 
+	// Kick the Firebase
 	[_geo getLocationForKey:_key withCallback:^(CLLocation *location, NSError *error)
 	{
 		// Execute [callback] callback
 		[_callback call:@[(location ? @[[[NSNumber alloc] initWithDouble:location.coordinate.latitude], [[NSNumber alloc] initWithDouble:location.coordinate.longitude]] : [NSNull alloc]), (error ? [error localizedDescription] : [NSNull alloc])] thisObject:nil];
+	}];
+}
+
+/**
+ * Removes the provided [key]
+ *
+ *	- args[0] - (NSString) the URL for Firebase Reference
+ *	- args[1] - (NSString) key
+ *  - args[2] - (KrollCallback) callback
+ *
+ */
+- (void)removeLocation: (id)args
+{
+    if (! [args count] == 3) {return;}
+	
+	// Initialize the [args]
+	NSString *_url = ([args[0] isKindOfClass:[NSString class]] ? args[0] : nil);
+	NSString *_key = ([args[1] isKindOfClass:[NSString class]] ? args[1] : nil);
+	KrollCallback *_callback = ([args[2] isKindOfClass:[KrollCallback class]] ? args[2] : nil);
+	
+	// Argument Filter
+	if (! _url || ! _key || ! _callback) {return;}
+	
+	// Create the [geo] Instance
+	GeoFire * _geo = [[GeoFire alloc] initWithFirebaseRef:[[Firebase alloc] initWithUrl:_url]];
+
+	// Kick the Firebase
+	[_geo removeKey:_key withCompletionBlock:^(NSError *error)
+	{
+		// Execute [callback] callback
+		[_callback call:@[(error ? [error localizedDescription] : [NSNull alloc])] thisObject:nil];
 	}];
 }
 
