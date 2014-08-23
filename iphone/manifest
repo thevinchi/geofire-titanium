@@ -1,0 +1,17 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 0.1.0
+apiversion: 2
+description: GeoFire
+author: Left Lane Lab
+license: GPL
+copyright: Copyright (c) 2014 by Left Lane Lab, LLC
+
+# these should not be edited
+name: GeoFire
+moduleid: com.leftlanelab.geofire
+guid: 6f677a17-3ffa-451f-9d05-ec349169e5b1
+platform: iphone
+minsdk: 3.2.1.GA
