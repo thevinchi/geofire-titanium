@@ -1,9 +1,8 @@
 /**
  * @author vstross
  */
-var RSVP = require('rsvp');
-
-var _instances = {'GeoFire':0},
+var RSVP = require('rsvp'),
+	_instances = {'GeoFire':0, 'GeoQuery':0},
 	_geofire = false,
 	_forge = false;
 
@@ -151,4 +150,127 @@ GeoFire.prototype.remove = function (key)
 		});
 
 	}, this));
+};
+
+/*
+ * Creates & return a new [GeoQuery] instance with [queryCriteria]
+ *
+ ******************************************************************************/
+GeoFire.prototype.query = function (queryCriteria)
+{
+	return new GeoQuery (this.url, queryCriteria);
+};
+
+/*
+===============================================================================>
+	GeoQuery
+===============================================================================>
+*/
+/*
+ * GeoQuery API Controller
+ *
+ * 	- expects to be created from an existing [GeoFire] instance
+ ******************************************************************************/
+function GeoQuery (url, queryCriteria)
+{
+	// Safety Net
+	if (! _.isString(url) || ! _.isObject(queryCriteria)) {throw Error('Invalid GeoQuery');}
+
+	// Global Variables
+	this._url = url;
+	this._listeners = {};
+	this._query = queryCriteria;
+
+	// Evaluate the [queryCriteria]
+	if (! _.isArray(this._query['center']) || ! _.isNumber(this._query['radius'])) {throw Error('Invalid Arguments');}
+	if (this._query.center.length != 2 || ! _.isNumber(this._query.center[0]) || ! _.isNumber(this._query.center[1])) {throw Error('Invalid value for CENTER');}
+
+	// Register the new [instance]
+	this._instance = _instances.GeoQuery++;
+
+	// Return the new [FirebaseQuery] pseudo-reference
+	return this;
+}
+
+/*
+ * Returns the location signifying the center of this query
+ *
+ ******************************************************************************/
+GeoQuery.prototype.center = function ()
+{
+	return this._query.center;
+};
+
+/*
+ * Returns the radius of this query, in kilometers.
+ *
+ ******************************************************************************/
+GeoQuery.prototype.radius = function ()
+{
+	return this._query.radius;
+};
+
+/*
+ * Updates the criteria for this query.
+ *
+ ******************************************************************************/
+GeoQuery.prototype.updateCriteria = function (queryCriteria)
+{
+	// Safety Net
+	if (! _.isObject(queryCriteria) || (_.isUndefined(queryCriteria['center']) && _.isUndefined(queryCriteria['radius']))) {throw Error('Invalid Arguments');}
+
+	// Evaluate the [queryCriteria].center
+	if (! _.isUndefined(queryCriteria['center']))
+	{
+		if (! _.isArray(queryCriteria['center'])) {throw Error('Invalid CENTER Argument, expects Array');}
+		if (queryCriteria.center.length != 2 || ! _.isNumber(queryCriteria.center[0]) || ! _.isNumber(queryCriteria.center[1])) {throw Error('Invalid value for CENTER');}
+
+		// Overwrite the current [query].[center]
+		this._query.center = queryCriteria.center;
+	}
+
+	// Evaluate the [queryCriteria].radius
+	if (! _.isUndefined(queryCriteria['radius']))
+	{
+		if (! _.isNumber(queryCriteria['radius'])) {throw Error('Invalid RADIUS Argument, expects Number');}
+
+		// Overwrite the current [query].[radius]
+		this._query.radius = queryCriteria.radius;
+	}
+
+	// Only update the GeoQuery if there are listeners
+	if (! _.isEmpty(this._listeners))
+	{
+		_geofire.updateQuery(this._instance, this._url, this._query.center, this._query.radius);
+	}
+};
+
+/*
+ * Updates the criteria for this query.
+ *
+ ******************************************************************************/
+GeoQuery.prototype.on = function (eventType, callback)
+{
+	// Safety Net
+	if (! _.isString(eventType)) {throw Error('GeoQuery.on: Invalid Arguments');}
+	if (! _.isFunction(callback)) {throw Error('GeoQuery.on: Invalid Arguments');}
+
+	// Initialize [listeners] collector for this [type]
+	if (_.isUndefined(this._listeners[eventType])) {this._listeners[eventType] = [];}
+
+	// Set the [listener], and save the [handle]
+	this._listeners[eventType].push({
+		'callback' : callback,
+		'handle' : _geofire.queryOn(this._instance, eventType,
+
+			function (key, location, distance)
+			{
+				if (_.isUndefined(key)) {callback()}
+				else {callback(key, location, distance)}
+			}
+		)
+	});
+
+	// Return the [callback] for future de-referencing purposes
+	return callback;
 };

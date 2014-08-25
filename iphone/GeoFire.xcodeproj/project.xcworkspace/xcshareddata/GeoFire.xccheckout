@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9FD45755-0427-4821-AF95-A112551F7DC0</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GeoFire</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</key>
+		<string>ssh://l3-bitbucket/leftlanelab/com.leftlanelab.geofire.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iphone/GeoFire.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://l3-bitbucket/leftlanelab/com.leftlanelab.geofire.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>source</string>
+		</dict>
+	</array>
+</dict>
+</plist>
