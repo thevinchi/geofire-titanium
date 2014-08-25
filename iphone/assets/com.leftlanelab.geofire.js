@@ -1,8 +1,16 @@
 /**
  * @author vstross
  */
-var RSVP = require('rsvp'),
-	_instances = {'GeoFire':0, 'GeoQuery':0},
+
+// Load the [underscore] library (try for both test & studio environments)
+try {var _ = require('com.leftlanelab.geofire.underscore')}
+catch (err) {var _ = require('modules/com.leftlanelab.geofire/0.1.0/platform/iphone/com.leftlanelab.geofire.underscore');}
+
+// Load the [RSVP] library (try for both test & studio environments)
+try {var RSVP = require('com.leftlanelab.geofire.rsvp')}
+catch (err) {var RSVP = require('modules/com.leftlanelab.geofire/0.1.0/platform/iphone/com.leftlanelab.geofire.rsvp');}
+
+var _instances = {'GeoFire':0, 'GeoQuery':0},
 	_geofire = false,
 	_forge = false;
 
