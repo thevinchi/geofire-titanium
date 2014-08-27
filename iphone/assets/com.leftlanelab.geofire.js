@@ -2,17 +2,25 @@
  * @author vstross
  */
 
-// Load the [underscore] library (try for both test & studio environments)
-try {var _ = require('com.leftlanelab.geofire.underscore')}
-catch (err) {var _ = require('modules/com.leftlanelab.geofire/0.1.0/platform/iphone/com.leftlanelab.geofire.underscore');}
-
-// Load the [RSVP] library (try for both test & studio environments)
-try {var RSVP = require('com.leftlanelab.geofire.rsvp')}
-catch (err) {var RSVP = require('modules/com.leftlanelab.geofire/0.1.0/platform/iphone/com.leftlanelab.geofire.rsvp');}
-
 var _instances = {'GeoFire':0, 'GeoQuery':0},
 	_geofire = false,
-	_forge = false;
+	_forge = false,
+	_version = '0.1.0';
+
+
+// Load the [underscore] library (try for both test & studio environments)
+if (typeof(_) === 'undefined')
+{
+	try {var _ = require('com.leftlanelab.geofire.underscore')}
+	catch (err) {var _ = require('modules/com.leftlanelab.geofire/' + _version + '/platform/iphone/com.leftlanelab.geofire.underscore');}
+}
+
+// Load the [RSVP] library (try for both test & studio environments)
+if (typeof(RSVP) === 'undefined')
+{
+	try {var RSVP = require('com.leftlanelab.geofire.rsvp')}
+	catch (err) {var RSVP = require('modules/com.leftlanelab.geofire/' + _version + '/platform/iphone/com.leftlanelab.geofire.rsvp');}
+}
 
 /**
  * Public API Endpoint for getting a [GeoFire] reference or module proxy
@@ -35,15 +43,11 @@ exports.new = function (firebase)
 };
 
 /*
-===============================================================================>
+ |=============================================================================>
 	GeoFire
-===============================================================================>
+ |=============================================================================>
 */
-/*
- * GeoFire API Controller
- *
- ******************************************************************************/
-function GeoFire (firebase)
+var GeoFire = function (firebase)
 {
 	// Safety Net (Firebase Instance)
 	if (! _.isUndefined(firebase) && _.isObject(firebase))
@@ -70,12 +74,6 @@ function GeoFire (firebase)
 		// Set the [Firebase] flag
 		this._firebase = false;
 	}
-
-	// Global Variables
-	this._listeners = {};
-
-	// Return the new [GeoFire] pseudo-reference
-	return this;
 }
 
 /*
@@ -83,7 +81,7 @@ function GeoFire (firebase)
  *
  ******************************************************************************/
 GeoFire.prototype.id = 'com.leftlanelab.geofire';
-GeoFire.prototype.version = '0.1.0';
+GeoFire.prototype.version = _version;
 
 /*
  * Returns the [Firebase] instance used to create this [GeoFire] instance.
@@ -170,23 +168,17 @@ GeoFire.prototype.query = function (queryCriteria)
 };
 
 /*
-===============================================================================>
+ |=============================================================================>
 	GeoQuery
-===============================================================================>
+ |=============================================================================>
 */
-/*
- * GeoQuery API Controller
- *
- * 	- expects to be created from an existing [GeoFire] instance
- ******************************************************************************/
-function GeoQuery (url, queryCriteria)
+var GeoQuery = function (url, queryCriteria)
 {
 	// Safety Net
 	if (! _.isString(url) || ! _.isObject(queryCriteria)) {throw Error('Invalid GeoQuery');}
 
 	// Global Variables
 	this._url = url;
-	this._listeners = {};
 	this._query = queryCriteria;
 
 	// Evaluate the [queryCriteria]
@@ -195,9 +187,6 @@ function GeoQuery (url, queryCriteria)
 
 	// Register the new [instance]
 	this._instance = _instances.GeoQuery++;
-
-	// Return the new [FirebaseQuery] pseudo-reference
-	return this;
 }
 
 /*
@@ -206,7 +195,7 @@ function GeoQuery (url, queryCriteria)
  ******************************************************************************/
 GeoQuery.prototype.center = function ()
 {
-	return this._query.center;
+	return this._query['center'];
 };
 
 /*
@@ -215,7 +204,7 @@ GeoQuery.prototype.center = function ()
  ******************************************************************************/
 GeoQuery.prototype.radius = function ()
 {
-	return this._query.radius;
+	return this._query['radius'];
 };
 
 /*
@@ -251,16 +240,12 @@ GeoQuery.prototype.updateCriteria = function (queryCriteria)
 		this._query.radius = queryCriteria.radius;
 	}
 
-	// Only inform Firebase if there are [listeners]
-	if (! _.isEmpty(this._listeners))
+	try
 	{
-		try
-		{
-			// Kick the Firebase
-			_geofire.queryUpdate(this._instance, this._query);
-		}
-		catch (err) {throw Error('GeoQuery.updateCriteria: Fatal Error');}
+		// Kick the Firebase
+		_geofire.queryUpdate(this._instance, this._query);
 	}
+	catch (err) {throw Error('GeoQuery.updateCriteria: Fatal Error');}
 };
 
 /*
@@ -275,47 +260,57 @@ GeoQuery.prototype.on = function (eventType, callback)
 	// Safety Net (arguments)
 	if (! _.isString(eventType) || ! _.isFunction(callback)) {throw Error('GeoQuery.on: Invalid Arguments');}
 
-	// Initialize [listeners] collector for this [type]
-	if (_.isUndefined(this._listeners[eventType])) {this._listeners[eventType] = [];}
-
 	try
 	{
-		// Set the [listener], and save the [handle]
-		this._listeners[eventType].push({
-			'callback' : callback,
-			'handle' : _geofire.queryOn(this._instance, this._url, this._query, eventType,
+		// Return GeoCallbackRegistration for easier de-registration
+		return new GeoCallbackRegistration(this._instance, _geofire.queryOn(this._instance, this._url, this._query, eventType,
 
-				function (key, location, distance)
-				{
-					if (_.isUndefined(key)) {callback()}
-					else {callback(key, location, distance)}
-				}
-			)
-		});
-
-		// Return the [callback] for future de-referencing purposes
-		return callback;
+			function (key, location)
+			{
+				if (_.isUndefined(key)) {callback()}
+				else {callback(key, location)}
+			})
+		);
 	}
 	catch (err)	{throw Error('GeoQuery.on: Fatal Error');}
 };
 
 /*
- * Attach [callback] to this query which will execute on [eventType]
+ * Terminates this query and it's listeners
  *
  ******************************************************************************/
 GeoQuery.prototype.cancel = function ()
 {
 	// Safety Net (Cancelled Query)
-	if (! this._query) {throw Error('GeoQuery.cancel: Query was Cancelled');}
+	if (! this._query) {throw Error('GeoQuery.cancel: Query was already Cancelled');}
 
 	// Clear the relevant globals
 	this._query = false;
-	this._listeners = false;
 
 	try
 	{
-		// Remove all [listeners]
+		// Kick the Firebase
 		_geofire.queryCancel(this._instance);
 	}
 	catch (err)	{throw Error('GeoQuery.cancel: Fatal Error');}
+};
+
+/*
+===============================================================================>
+	GeoCallbackRegistration
+===============================================================================>
+*/
+var GeoCallbackRegistration = function(instance, handle)
+{
+	// Safety Net
+	if (! _.isNumber(instance) || ! _.isNumber(handle)) {throw Error('GeoCallbackRegistration: Invalid Arguments');}
+
+	/*
+	 * Cancel the callback (observer) for [instance] by [handle]
+	 *
+ 	***************************************************************************/
+	this.cancel = function ()
+	{
+		_geofire.queryOff(instance, handle);
+	};
 };

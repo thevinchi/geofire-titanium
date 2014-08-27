@@ -291,7 +291,7 @@
 	if (! self.gInstances[_id]) {return;}
 
 	// Remove the observer by [handle]
-	[self.gInstances[_id] removeObserverWithHandle:[_handle integerValue]];
+	[self.gInstances[_id] removeObserverWithFirebaseHandle:[_handle integerValue]];
 }
 
 /**
