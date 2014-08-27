@@ -1,39 +1,29 @@
-# GeoFire Module
+# GeoFire iOS Module for Titanium #
 
-## Description
+## Documentation ##
 
-TODO: Enter your module description here
+Please visit the [Online Documentation](http://geofire.leftlanelab.com) for the most recent version of this information.
 
-## Accessing the GeoFire Module
+## Description ##
+
+This module is constructed to mimic the official [GeoFire JavaScript Library](https://www.firebase.com/docs/javascript/firebase/index.html) from [Firebase](http://www.firebase.com). All functions available with the official library are also available on this module. All methods take the same arguments and return the same values where applicable.
+
+## Accessing the GeoFire Module ##
 
 To access this module from JavaScript, you would do the following:
 
-    var geofire = require("com.leftlanelab.geofire");
+	var GeoFire = require('com.leftlanelab.geofire');
+	var geoReference = GeoFire.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
 
-The geofire variable is a reference to the Module object.
+	// ... OR ... if com.leftlanelab.geofire.forge is set in tiapp.xml
+	var geoReference = GeoFire.new();
 
-## Reference
+## Author ##
 
-TODO: If your module has an API, you should document
-the reference here.
+This module was developed by [Left Lane Lab](http://www.leftlanelab.com), please send support requests to [support@leftlanelab.com](mailto:support@leftlanelab.com).
 
-### geofire.function
+## License ##
 
-TODO: This is an example of a module function.
+Copyright 2014 Left Lane Lab, LLC.
 
-### geofire.property
-
-TODO: This is an example of a module property.
-
-## Usage
-
-TODO: Enter your usage example here
-
-## Author
-
-TODO: Enter your author name, email and other contact
-details you want to share here.
-
-## License
-
-TODO: Enter your license/legal information here.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
