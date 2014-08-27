@@ -161,12 +161,12 @@ GeoFire.prototype.remove = function (key)
 };
 
 /*
- * Creates & return a new [GeoQuery] instance with [queryCriteria]
+ * Create & return a new [GeoQuery] instance with [queryCriteria]
  *
  ******************************************************************************/
 GeoFire.prototype.query = function (queryCriteria)
 {
-	return new GeoQuery (this.url, queryCriteria);
+	return new GeoQuery (this._url, queryCriteria);
 };
 
 /*
@@ -225,36 +225,43 @@ GeoQuery.prototype.radius = function ()
 GeoQuery.prototype.updateCriteria = function (queryCriteria)
 {
 	// Safety Net
-	if (! _.isObject(queryCriteria) || (_.isUndefined(queryCriteria['center']) && _.isUndefined(queryCriteria['radius']))) {throw Error('Invalid Arguments');}
+	if (! _.isObject(queryCriteria) || (_.isUndefined(queryCriteria['center']) && _.isUndefined(queryCriteria['radius']))) {throw Error('GeoQuery.updateCriteria: Invalid Arguments');}
 
 	// Evaluate the [queryCriteria].center
 	if (! _.isUndefined(queryCriteria['center']))
 	{
-		if (! _.isArray(queryCriteria['center'])) {throw Error('Invalid CENTER Argument, expects Array');}
-		if (queryCriteria.center.length != 2 || ! _.isNumber(queryCriteria.center[0]) || ! _.isNumber(queryCriteria.center[1])) {throw Error('Invalid value for CENTER');}
+		// Validate the input
+		if (! _.isArray(queryCriteria['center'])) {throw Error('GeoQuery.updateCriteria: Invalid CENTER Argument, expects Array');}
+		if (queryCriteria.center.length != 2 || ! _.isNumber(queryCriteria.center[0]) || ! _.isNumber(queryCriteria.center[1])) {throw Error('GeoQuery.updateCriteria: Invalid value for CENTER');}
 
-		// Overwrite the current [query].[center]
+		// Overwrite the local [query].[center]
 		this._query.center = queryCriteria.center;
 	}
 
 	// Evaluate the [queryCriteria].radius
 	if (! _.isUndefined(queryCriteria['radius']))
 	{
-		if (! _.isNumber(queryCriteria['radius'])) {throw Error('Invalid RADIUS Argument, expects Number');}
+		// Validate the input
+		if (! _.isNumber(queryCriteria['radius'])) {throw Error('GeoQuery.updateCriteria: Invalid RADIUS Argument, expects Number');}
 
-		// Overwrite the current [query].[radius]
+		// Overwrite the local [query].[radius]
 		this._query.radius = queryCriteria.radius;
 	}
 
-	// Only update the GeoQuery if there are listeners
+	// Only inform Firebase if there are [listeners]
 	if (! _.isEmpty(this._listeners))
 	{
-		_geofire.updateQuery(this._instance, this._url, this._query.center, this._query.radius);
+		try
+		{
+			// Kick the Firebase
+			_geofire.updateQuery(this._instance, this._query);
+		}
+		catch (err) {throw Error('GeoQuery.updateCriteria: Fatal Error');}
 	}
 };
 
 /*
- * Updates the criteria for this query.
+ * Attach [callback] to this query which will execute on [eventType]
  *
  ******************************************************************************/
 GeoQuery.prototype.on = function (eventType, callback)
@@ -266,19 +273,23 @@ GeoQuery.prototype.on = function (eventType, callback)
 	// Initialize [listeners] collector for this [type]
 	if (_.isUndefined(this._listeners[eventType])) {this._listeners[eventType] = [];}
 
-	// Set the [listener], and save the [handle]
-	this._listeners[eventType].push({
-		'callback' : callback,
-		'handle' : _geofire.queryOn(this._instance, eventType,
+	try
+	{
+		// Set the [listener], and save the [handle]
+		this._listeners[eventType].push({
+			'callback' : callback,
+			'handle' : _geofire.queryOn(this._instance, this._url, this._query, eventType,
 
-			function (key, location, distance)
-			{
-				if (_.isUndefined(key)) {callback()}
-				else {callback(key, location, distance)}
-			}
-		)
-	});
+				function (key, location, distance)
+				{
+					if (_.isUndefined(key)) {callback()}
+					else {callback(key, location, distance)}
+				}
+			)
+		});
 
-	// Return the [callback] for future de-referencing purposes
-	return callback;
+		// Return the [callback] for future de-referencing purposes
+		return callback;
+	}
+	catch (err)	{throw Error('GeoQuery.on: Fatal Error');}
 };

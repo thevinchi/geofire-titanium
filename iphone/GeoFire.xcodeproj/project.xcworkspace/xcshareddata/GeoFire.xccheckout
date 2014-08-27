@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>9FD45755-0427-4821-AF95-A112551F7DC0</string>
+	<string>C5A63B8F-3F5B-4F2E-9230-630A06A34A73</string>
 	<key>IDESourceControlProjectName</key>
 	<string>GeoFire</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</key>
-		<string>ssh://l3-bitbucket/leftlanelab/com.leftlanelab.geofire.git</string>
+		<key>9D6FB905-6C5E-420C-A770-59D65319BCDC</key>
+		<string>ssh://l3-github/LeftLaneLab/geofire-titanium.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>iphone/GeoFire.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</key>
+		<key>9D6FB905-6C5E-420C-A770-59D65319BCDC</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://l3-bitbucket/leftlanelab/com.leftlanelab.geofire.git</string>
+	<string>ssh://l3-github/LeftLaneLab/geofire-titanium.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</string>
+	<string>9D6FB905-6C5E-420C-A770-59D65319BCDC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>41D92B24-F750-47C3-BAD5-B30C1EDA4DFC</string>
+			<string>9D6FB905-6C5E-420C-A770-59D65319BCDC</string>
 			<key>IDESourceControlWCCName</key>
 			<string>source</string>
 		</dict>
