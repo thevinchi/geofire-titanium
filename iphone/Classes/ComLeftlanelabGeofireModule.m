@@ -187,47 +187,6 @@
 }
 
 /**
- * Updates the criteria for a query.
- *
- *	- args[0] - (NSNumber) the GFQuery [instance] identifier
- *	- args[1] - (NSDictionary) the Query Criteria
- */
-- (void)updateQuery: (id)args
-{
-    if (! [args count] == 2) {return;}
-
-	// Initialize the [args]
-	NSNumber *_id = ([args[0] isKindOfClass:[NSNumber class]] ? args[0] : nil);
-	NSDictionary *_criteria = ([args[1] isKindOfClass:[NSDictionary class]] ? args[1] : nil);
-
-	// Argument Filter
-	if (! _id || ! _criteria) {return;}
-
-	// Validate [instance] exists for [id]
-	if (! self.gInstances[_id]) {return;}
-
-	// Validate [criteria] (Simple)
-	if (! _criteria[@"center"] || ! _criteria[@"radius"]) {return;}
-
-	// Validate [criteria].[center]
-	if (! [_criteria[@"center"] isKindOfClass:[NSArray class]]
-		|| ! [_criteria[@"center"] count] == 2
-		|| ! [_criteria[@"center"][0] isKindOfClass:[NSNumber class]]
-		|| ! [_criteria[@"center"][1] isKindOfClass:[NSNumber class]]
-		) {return;}
-
-	// Validate [criteria].[radius]
-	if (! [_criteria[@"radius"] isKindOfClass:[NSNumber class]]) {return;}
-
-	// Extract the [query]
-	GFCircleQuery * _query = self.gInstances[_id];
-
-	// Update the [center] && [radius]
-	_query.center = [[CLLocation alloc] initWithLatitude:[_criteria[@"center"][0] doubleValue] longitude:[_criteria[@"center"][1] doubleValue]];
-	_query.radius = [_criteria[@"radius"] doubleValue];
-}
-
-/**
  * Create a listener for an [instance] of GF[Circle|Region]Query
  *
  *	- args[0] - (NSNumber) the GFQuery [instance] identifier
@@ -333,6 +292,72 @@
 
 	// Remove the observer by [handle]
 	[self.gInstances[_id] removeObserverWithHandle:[_handle integerValue]];
+}
+
+/**
+ * Updates the criteria for a query.
+ *
+ *	- args[0] - (NSNumber) the GFQuery [instance] identifier
+ *	- args[1] - (NSDictionary) the Query Criteria
+ */
+- (void)queryUpdate: (id)args
+{
+    if (! [args count] == 2) {return;}
+	
+	// Initialize the [args]
+	NSNumber *_id = ([args[0] isKindOfClass:[NSNumber class]] ? args[0] : nil);
+	NSDictionary *_criteria = ([args[1] isKindOfClass:[NSDictionary class]] ? args[1] : nil);
+	
+	// Argument Filter
+	if (! _id || ! _criteria) {return;}
+	
+	// Validate [instance] exists for [id]
+	if (! self.gInstances[_id]) {return;}
+	
+	// Validate [criteria] (Simple)
+	if (! _criteria[@"center"] || ! _criteria[@"radius"]) {return;}
+	
+	// Validate [criteria].[center]
+	if (! [_criteria[@"center"] isKindOfClass:[NSArray class]]
+		|| ! [_criteria[@"center"] count] == 2
+		|| ! [_criteria[@"center"][0] isKindOfClass:[NSNumber class]]
+		|| ! [_criteria[@"center"][1] isKindOfClass:[NSNumber class]]
+		) {return;}
+	
+	// Validate [criteria].[radius]
+	if (! [_criteria[@"radius"] isKindOfClass:[NSNumber class]]) {return;}
+	
+	// Extract the [query]
+	GFCircleQuery * _query = self.gInstances[_id];
+	
+	// Update the [center] && [radius]
+	_query.center = [[CLLocation alloc] initWithLatitude:[_criteria[@"center"][0] doubleValue] longitude:[_criteria[@"center"][1] doubleValue]];
+	_query.radius = [_criteria[@"radius"] doubleValue];
+}
+
+/**
+ * Cancel all Observers && destroy the [instance]
+ *
+ *	- args[0] - (NSNumber) the GFQuery [instance] identifier
+ */
+- (void)queryCancel: (id)args
+{
+    if (! [args count]) {return;}
+
+	// Initialize the [args]
+	NSNumber *_id = ([args[0] isKindOfClass:[NSNumber class]] ? args[0] : nil);
+	
+	// Argument Filter
+	if (! _id) {return;}
+
+	// Validate [instance] exists for [id]
+	if (! self.gInstances[_id]) {return;}
+
+	// Remove all Observers from [instance] for [id]
+	[self.gInstances[_id] removeAllObservers];
+
+	// Remove [instance]
+	[self.gInstances removeObjectForKey:_id];
 }
 
 @end

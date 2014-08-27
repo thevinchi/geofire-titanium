@@ -224,7 +224,10 @@ GeoQuery.prototype.radius = function ()
  ******************************************************************************/
 GeoQuery.prototype.updateCriteria = function (queryCriteria)
 {
-	// Safety Net
+	// Safety Net (Cancelled Query)
+	if (! this._query) {throw Error('GeoQuery.updateCriteria: Query was Cancelled');}
+
+	// Safety Net (arguments)
 	if (! _.isObject(queryCriteria) || (_.isUndefined(queryCriteria['center']) && _.isUndefined(queryCriteria['radius']))) {throw Error('GeoQuery.updateCriteria: Invalid Arguments');}
 
 	// Evaluate the [queryCriteria].center
@@ -254,7 +257,7 @@ GeoQuery.prototype.updateCriteria = function (queryCriteria)
 		try
 		{
 			// Kick the Firebase
-			_geofire.updateQuery(this._instance, this._query);
+			_geofire.queryUpdate(this._instance, this._query);
 		}
 		catch (err) {throw Error('GeoQuery.updateCriteria: Fatal Error');}
 	}
@@ -266,9 +269,11 @@ GeoQuery.prototype.updateCriteria = function (queryCriteria)
  ******************************************************************************/
 GeoQuery.prototype.on = function (eventType, callback)
 {
-	// Safety Net
-	if (! _.isString(eventType)) {throw Error('GeoQuery.on: Invalid Arguments');}
-	if (! _.isFunction(callback)) {throw Error('GeoQuery.on: Invalid Arguments');}
+	// Safety Net (Cancelled Query)
+	if (! this._query) {throw Error('GeoQuery.updateCriteria: Query was Cancelled');}
+
+	// Safety Net (arguments)
+	if (! _.isString(eventType) || ! _.isFunction(callback)) {throw Error('GeoQuery.on: Invalid Arguments');}
 
 	// Initialize [listeners] collector for this [type]
 	if (_.isUndefined(this._listeners[eventType])) {this._listeners[eventType] = [];}
@@ -292,4 +297,25 @@ GeoQuery.prototype.on = function (eventType, callback)
 		return callback;
 	}
 	catch (err)	{throw Error('GeoQuery.on: Fatal Error');}
+};
+
+/*
+ * Attach [callback] to this query which will execute on [eventType]
+ *
+ ******************************************************************************/
+GeoQuery.prototype.cancel = function ()
+{
+	// Safety Net (Cancelled Query)
+	if (! this._query) {throw Error('GeoQuery.cancel: Query was Cancelled');}
+
+	// Clear the relevant globals
+	this._query = false;
+	this._listeners = false;
+
+	try
+	{
+		// Remove all [listeners]
+		_geofire.queryCancel(this._instance);
+	}
+	catch (err)	{throw Error('GeoQuery.cancel: Fatal Error');}
 };
