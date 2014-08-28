@@ -6,15 +6,15 @@ Appcelerator Titanium module for realtime location queries using [Firebase](http
 
 This module is constructed to mimic the official [GeoFire JavaScript Library](https://github.com/firebase/geofire-js) from [Firebase](http://www.firebase.com). All functions available with the official library are also available on this module. All methods take the same arguments and return the same values where applicable.
 
-## Download v0.1.0 ##
+## Download or Build ##
 
-You can download the latest stable build using the link below, or you can clone the full repo and `./build.py`
+Download the latest stable build below, or clone the repo build with `./build.py`
 
-- [Download the plug-n-play packaged module here](https://github.com/LeftLaneLab/geofire-titanium/blob/master/iphone/dists/com.leftlanelab.geofire-iphone-0.1.0.zip)
+- [Download the plug-n-play packaged module here](https://github.com/LeftLaneLab/geofire-titanium/blob/master/iphone/dist/com.leftlanelab.geofire-iphone-0.1.0.zip?raw=true)
 
 ## Installing the Module ##
 
-This module is only intended for use with Appcelerator (Titanium) projects. Please following these instructions to install the module into your environment after you download the packaged module from the link above.
+This module is only intended for use with Appcelerator (Titanium) projects. Please follow these instructions to install the packaged module into your environment.
 
 ## Using the Module ##
 
