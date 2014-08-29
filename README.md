@@ -6,13 +6,13 @@ Titanium Native iOS Module for realtime location queries using [Firebase](http:/
 
 Download the latest stable build below, and install with [these instructions](http://docs.appcelerator.com/titanium/latest/#!/guide/Using_a_Module). You are also welcome to clone and build, of course.
 
-- [Download the plug-n-play packaged module here](https://github.com/LeftLaneLab/geofire-titanium/blob/master/iphone/dist/com.leftlanelab.geofire-iphone-latest.zip?raw=true)
+- [Download the latest stable build](https://github.com/LeftLaneLab/geofire-titanium/blob/master/iphone/dist/com.leftlanelab.geofire-iphone-latest.zip?raw=true)
 
 ## Documentation ##
 
 This module is a Titanium port of the official [GeoFire JavaScript Library](https://github.com/firebase/geofire-js) from [Firebase](http://www.firebase.com). All functions available with the official library are also available on this module. All methods take the same arguments and return the same values where applicable.
 
-** The only relevant difference is the way a new GeoFire object is instantiated: **
+*The only relevant difference is the way a new GeoFire object is instantiated:*
 
 ```JavaScript
 // WRONG: Create a new [GeoFire] reference using the Firebase library
@@ -126,6 +126,8 @@ winUsers.add(btnInvite);
 
 winUsers.open();
 ```
+
+*Refer to the [GeoFire JavaScript Library from Firebase](https://github.com/firebase/geofire-js) for a full list of available methods and their uses.*
 
 ## Author ##
 
