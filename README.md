@@ -1,14 +1,13 @@
-# GeoFire iOS Module for Titanium #
+# GeoFire for Titanium #
 
-Titanium Native iOS Module for realtime location queries using [Firebase](http://www.firebase.com).
+JavaScript library for realtime location queries using the [Firebase iOS Module for Titanium](https://github.com/LeftLaneLab/firebase-titanium).
 
-## Download or Build ##
+This library is a direct port of the [GeoFire-js library](https://github.com/firebase/geofire-js) for use with Appcelerator Titanium apps.
 
-Download the latest stable build below, and install with [these instructions](http://docs.appcelerator.com/titanium/latest/#!/guide/Using_a_Module). You are also welcome to clone and build, of course.
+## Dependencies ##
 
-- [Download the latest stable build](https://github.com/LeftLaneLab/geofire-titanium/releases/download/v0.1/com.leftlanelab.geofire-iphone-0.1.0.zip)
-- [Install with gitTio](http://gitt.io/component/com.leftlanelab.geofire)
-	- `gittio install com.leftlanelab.geofire`
+- [Firebase iOS Module for Titanium](https://github.com/LeftLaneLab/firebase-titanium)
+- [RSVP.js](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.js)
 
 ## Compatibility ##
 
@@ -17,46 +16,27 @@ Tested with the following Titanium API versions
 - Titanium 3.2.1
 - Titanium 3.3.0
 
+## Installation ##
+
+- Install the [Firebase iOS Module for Titanium](https://github.com/LeftLaneLab/firebase-titanium)
+- Save the [latest version](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.js) of RSVP.js as `/app/lib/rsvp.js` in your project.
+- Save the [latest version](https://github.com/LeftLaneLab/geofire-titanium/releases) of GeoFire-Titanium as `/app/lib/geofire-titanium.js` in your project.
+
 ## Documentation ##
 
-This module is a Titanium port of the official [GeoFire JavaScript Library](https://github.com/firebase/geofire-js) from [Firebase](http://www.firebase.com). All functions available with the official library are also available on this module. All methods take the same arguments and return the same values where applicable.
+This library is an unofficial port of the [GeoFire-js library](https://github.com/firebase/geofire-js). All functions available with the official library are also available on this library. All methods take the same arguments and return the same values where applicable.
 
-## Deltas ##
+## Using the Library ##
 
-There are only two relevant differences between using this module and the official library from Firebase.
-
-#### Instantiation ####
-
-Currently the official Firebase GeoFire library only supports GeoFire references created with an existing Firebase reference passed into the constructor. With this module, you can simply pass a URL into the constructor:
+Below is a very simple example of using the GeoFire library to move a `key` around on a map and detect the changes relative to a `radius` with a `center` point.
 
 ```JavaScript
-// Create a new [GeoFire] reference from a URL using this module
-var geoRef = GeoFire.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
-
-// Firebase GeoFire library method: (NOTE: this does NOT work with this module!!)
-var firebaseRef = new Firebase('https://l3-appcelerator-demo.firebaseio.com/geofire');
-var geoRef = new GeoFire(firebaseRef);
-```
-
-#### Instantiation by Firebase Reference ####
-
-However, if you are also using my Firebase iOS Module for Titanium in your project, then you can instantiate your GeoFire references by passing an existing Firebase reference:
-
-```JavaScript
-var firebaseRef = Firebase.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
-var geoRef = GeoFire.new(firebaseRef);
-```
-
-## Using the Module ##
-
-Below is a very simple example of using the GeoFire module to move a `key` around on a map and detect the changes relative to a `radius` with a `center` point.
-
-```JavaScript
-// Load the Module
-var GeoFire = require('com.leftlanelab.geofire');
+var Firebase = require('com.leftlanelab.firebase');
+var GeoFire = require('geofire-titanium');
 
 // Create a [GeoFire] Reference from your Firebase
-var geoRef = GeoFire.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
+var newRef = Firebase.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
+var geoRef = new GeoFire(newRef);
 
 // Set a location for John
 geoRef.set('John', [39.092765, -84.509733]).then(function ()
@@ -152,32 +132,3 @@ winUsers.open();
 ```
 
 *Refer to the [GeoFire JavaScript Library from Firebase](https://github.com/firebase/geofire-js) for a full list of available methods and their uses.*
-
-## Globals (tiapp.xml) ##
-
-The module currently only supports one global property for the base url of your Firebase forge:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<ti:app xmlns:ti="http://ti.appcelerator.org">
-  ...
-  <property name="com.leftlanelab.geofire.forge" type="string">https://l3-appcelerator-demo.firebaseio.com</property>
-  ...
-</ti:app>
-```
-
-When this property is set in tiapp.xml, you can omit the full URL when instantiating your GeoFire references:
-
-```JavaScript
-var geoRef = GeoFire.new('/geofire/users');
-```
-
-_NOTE:_ the `GeoFire.new()` method will detect a string beginning with `https://` and override the global property. This allows you to load data from multiple Firebase locations while also using the global forge property.
-
-## Author ##
-
-This module was developed by [Left Lane Lab](http://www.leftlanelab.com). Please use the [issue tracker](https://github.com/LeftLaneLab/geofire-titanium/issues) for support requests, bug reports, and enhancement ideas... **really, I want to hear from you!**
-
-## License ##
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
