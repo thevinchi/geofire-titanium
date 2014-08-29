@@ -6,7 +6,9 @@ Titanium Native iOS Module for realtime location queries using [Firebase](http:/
 
 Download the latest stable build below, and install with [these instructions](http://docs.appcelerator.com/titanium/latest/#!/guide/Using_a_Module). You are also welcome to clone and build, of course.
 
-- [Download the latest stable build](https://github.com/LeftLaneLab/geofire-titanium/blob/master/iphone/dist/com.leftlanelab.geofire-iphone-0.1.0.zip?raw=true)
+- [Download the latest stable build](https://github.com/LeftLaneLab/geofire-titanium/releases/download/v0.1/com.leftlanelab.geofire-iphone-0.1.0.zip)
+- [Install with gitTio](http://gitt.io/component/com.leftlanelab.geofire)
+	- `gittio install com.leftlanelab.geofire`
 
 ## Compatibility ##
 
