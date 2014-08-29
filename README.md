@@ -8,19 +8,41 @@ Download the latest stable build below, and install with [these instructions](ht
 
 - [Download the latest stable build](https://github.com/LeftLaneLab/geofire-titanium/blob/master/iphone/dist/com.leftlanelab.geofire-iphone-latest.zip?raw=true)
 
+## Compatibility ##
+
+Tested with the following Titanium API versions
+
+- Titanium 3.2.1
+- Titanium 3.3.0
+
 ## Documentation ##
 
 This module is a Titanium port of the official [GeoFire JavaScript Library](https://github.com/firebase/geofire-js) from [Firebase](http://www.firebase.com). All functions available with the official library are also available on this module. All methods take the same arguments and return the same values where applicable.
 
-*The only relevant difference is the way a new GeoFire object is instantiated:*
+## Deltas ##
+
+There are only two relevant differences between using this module and the official library from Firebase.
+
+#### Instantiation ####
+
+Currently the official Firebase GeoFire library only supports GeoFire references created with an existing Firebase reference passed into the constructor. With this module, you can simply pass a URL into the constructor:
 
 ```JavaScript
-// WRONG: Create a new [GeoFire] reference using the Firebase library
-var geoRef = new GeoFire('https://l3-appcelerator-demo.firebaseio.com/geofire');
-
-// CORRECT: Create a new [GeoFire] reference using this module
+// Create a new [GeoFire] reference from a URL using this module
 var geoRef = GeoFire.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
 
+// Firebase GeoFire library method: (NOTE: this does NOT work with this module!!)
+var firebaseRef = new Firebase('https://l3-appcelerator-demo.firebaseio.com/geofire');
+var geoRef = new GeoFire(firebaseRef);
+```
+
+#### Instantiation by Firebase Reference ####
+
+However, if you are also using my Firebase iOS Module for Titanium in your project, then you can instantiate your GeoFire references by passing an existing Firebase reference:
+
+```JavaScript
+var firebaseRef = Firebase.new('https://l3-appcelerator-demo.firebaseio.com/geofire');
+var geoRef = GeoFire.new(firebaseRef);
 ```
 
 ## Using the Module ##
@@ -128,6 +150,27 @@ winUsers.open();
 ```
 
 *Refer to the [GeoFire JavaScript Library from Firebase](https://github.com/firebase/geofire-js) for a full list of available methods and their uses.*
+
+## Globals (tiapp.xml) ##
+
+The module currently only supports one global property for the base url of your Firebase forge:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:app xmlns:ti="http://ti.appcelerator.org">
+  ...
+  <property name="com.leftlanelab.geofire.forge" type="string">https://l3-appcelerator-demo.firebaseio.com</property>
+  ...
+</ti:app>
+```
+
+When this property is set in tiapp.xml, you can omit the full URL when instantiating your GeoFire references:
+
+```JavaScript
+var geoRef = GeoFire.new('/geofire/users');
+```
+
+_NOTE:_ the `GeoFire.new()` method will detect a string beginning with `https://` and override the global property. This allows you to load data from multiple Firebase locations while also using the global forge property.
 
 ## Author ##
 
