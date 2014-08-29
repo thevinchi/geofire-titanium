@@ -2,12 +2,10 @@
 
 JavaScript library for realtime location queries using the [Firebase iOS Module for Titanium](https://github.com/LeftLaneLab/firebase-titanium).
 
-This library is a direct port of the [GeoFire-js library](https://github.com/firebase/geofire-js) for use with Appcelerator Titanium apps.
-
 ## Dependencies ##
 
 - [Firebase iOS Module for Titanium](https://github.com/LeftLaneLab/firebase-titanium)
-- [RSVP.js](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.js)
+- [RSVP.js](https://github.com/tildeio/rsvp.js)
 
 ## Compatibility ##
 
