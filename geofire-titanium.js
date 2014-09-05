@@ -5,13 +5,13 @@
  *   This library is ported from the official GeoFire JavaScript library for use
  *   with the Firebase-Titanium module in the Appcelerator Titanium environment.
  *
- *   GeoFire-Titanium v0.2
+ *   GeoFire-Titanium v1.0.2
  *   https://github.com/LeftLaneLab/geofire-titanium
  *   License: MIT
  *
  *  Ported From:
  *
- *   GeoFire 3.0.0
+ *   GeoFire 3.0.2
  *   https://github.com/firebase/geofire/
  *   License: MIT
  *
@@ -20,13 +20,11 @@
 // Load the [RSVP] library
 if (typeof RSVP  === 'undefined')
 {
-	try {var RSVP = require('rsvp');}
-	catch (err) {throw new Error('GeoFire Error: The RSVP library is required for this module');}
+	var RSVP = require('rsvp');
 }
 
 var GeoFire = (function() {
   "use strict";
-
 /**
  * Creates a GeoCallbackRegistration instance.
  *
@@ -159,16 +157,10 @@ var GeoFire = function(firebaseRef) {
   /*****************/
   /*  CONSTRUCTOR  */
   /*****************/
-  if (typeof(firebaseRef.id) === 'undefined'
-  	|| firebaseRef.id != 'com.leftlanelab.firebase'
-  	|| typeof(firebaseRef.version) === 'undefined'
-  ) {throw new Error('firebaseRef must be an instance of Firebase');}
-
-/* Removed to accommodate weird Titanium module style
-  if (firebaseRef instanceof Firebase === false) {
+  if (Object.prototype.toString.call(firebaseRef) !== "[object Object]") {
     throw new Error("firebaseRef must be an instance of Firebase");
   }
-*/
+
   var _firebaseRef = firebaseRef;
 };
 
@@ -961,6 +953,13 @@ var GeoQuery = function (firebaseRef, queryCriteria) {
         valueCallback: valueCallback
       };
     });
+    // Based upon the algorithm to calculate geohashes, it's possible that no "new"
+    // geohashes were queried even if the client updates the radius of the query.
+    // This results in no "READY" event being fired after the .updateQuery() call.
+    // Check to see if this is the case, and trigger the "READY" event.
+    if(geohashesToQuery.length === 0) {
+      _geohashQueryReadyCallback();
+    }
   }
 
   /********************/
@@ -1130,17 +1129,9 @@ var GeoQuery = function (firebaseRef, queryCriteria) {
   /*  CONSTRUCTOR  */
   /*****************/
   // Firebase reference of the GeoFire which created this query
-  if (typeof(firebaseRef.id) === 'undefined'
-  	|| firebaseRef.id != 'com.leftlanelab.firebase'
-  	|| typeof(firebaseRef.version) === 'undefined'
-  ) {throw new Error('firebaseRef must be an instance of Firebase');}
-
-/* Removed to accommodate weird Titanium module style
-  if (firebaseRef instanceof Firebase === false) {
+  if (Object.prototype.toString.call(firebaseRef) !== "[object Object]") {
     throw new Error("firebaseRef must be an instance of Firebase");
   }
-*/
-
   var _firebaseRef = firebaseRef;
 
   // Event callbacks
