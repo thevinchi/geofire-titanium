@@ -5,7 +5,7 @@
  *   This library is ported from the official GeoFire JavaScript library for use
  *   with the Firebase-Titanium module in the Appcelerator Titanium environment.
  *
- *   GeoFire-Titanium v0.2.1
+ *   GeoFire-Titanium v1.0.2
  *   https://github.com/LeftLaneLab/geofire-titanium
  *   License: MIT
  *
