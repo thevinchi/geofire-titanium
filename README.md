@@ -13,6 +13,7 @@ Tested with the following Titanium API versions
 
 - Titanium 3.2.1
 - Titanium 3.3.0
+- Titanium 3.4.0
 
 ## Installation ##
 
